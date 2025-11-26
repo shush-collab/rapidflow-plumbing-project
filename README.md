@@ -1,73 +1,64 @@
-# Welcome to your Lovable project
+## RapidFlow Plumbing Website
 
-## Project info
+This is a single-page marketing and lead capture site for **RapidFlow Plumbing**, built with React, TypeScript, Vite, Tailwind CSS, and shadcn-ui. It includes a contact form that sends requests to your inbox via a Supabase Edge Function and the Resend email API.
 
-**URL**: https://lovable.dev/projects/58d71f76-faa9-4292-a444-4e183f83dcf7
+### Prerequisites
 
-## How can I edit this code?
+- Node.js (LTS recommended)
+- npm
 
-There are several ways of editing your application.
+Optional (for the serverless function):
+- A Supabase project
+- A Resend account and API key
 
-**Use Lovable**
+### Install & Run (frontend)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/58d71f76-faa9-4292-a444-4e183f83dcf7) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will start on `http://localhost:8080` (configured in `vite.config.ts`).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Environment Configuration
 
-**Use GitHub Codespaces**
+Frontend (`src/integrations/supabase/client.ts`) expects:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-## What technologies are used for this project?
+You can set these in a `.env` file at the project root:
 
-This project is built with:
+```bash
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Contact Form Email (Supabase Edge Function)
 
-## How can I deploy this project?
+The contact form calls the Supabase Edge Function in `supabase/functions/send-contact-email/index.ts`.  
+By default, it sends emails to:
 
-Simply open [Lovable](https://lovable.dev/projects/58d71f76-faa9-4292-a444-4e183f83dcf7) and click on Share -> Publish.
+- `ashutoshthakur713@gmail.com`
 
-## Can I connect a custom domain to my Lovable project?
+You can override the recipient by setting this environment variable in your Supabase project:
 
-Yes, you can!
+- `CONTACT_RECIPIENT_EMAIL`
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+The function also requires:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- `RESEND_API_KEY` – your Resend API key
+
+To deploy the function (from the project root, with Supabase CLI installed and logged in):
+
+```bash
+supabase functions deploy send-contact-email
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+This generates a production build in the `dist` folder that you can deploy with any static hosting provider or via your own infrastructure.

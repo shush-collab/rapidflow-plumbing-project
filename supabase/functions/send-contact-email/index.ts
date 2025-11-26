@@ -2,6 +2,8 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const CONTACT_RECIPIENT_EMAIL =
+  Deno.env.get("CONTACT_RECIPIENT_EMAIL") || "ashutoshthakur713@gmail.com";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -38,7 +40,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "RapidFlow Plumbing <onboarding@resend.dev>",
-        to: ["help@rapidflowplumbing.com"],
+        to: [CONTACT_RECIPIENT_EMAIL],
         subject: `New Service Request: ${serviceType}`,
         html: `
           <h2>New Service Request from RapidFlow Plumbing Website</h2>

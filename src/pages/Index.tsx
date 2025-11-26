@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Mail, MapPin, Menu, X, Clock, Shield, DollarSign, Star, CheckCircle2, Wrench, Droplet, Flame, Search, Home } from "lucide-react";
-import heroImage from "@/assets/hero-plumber.jpg";
+import heroImage from "@/assets/plumber.jpg";
 import plumberWorking from "@/assets/plumber-working.jpg";
 import toolsPipes from "@/assets/tools-pipes.jpg";
 import { useForm } from "react-hook-form";
