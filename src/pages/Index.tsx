@@ -9,9 +9,59 @@ import { Phone, Mail, MapPin, Menu, X, Clock, Shield, DollarSign, Star, CheckCir
 import heroImage from "@/assets/hero-plumber.jpg";
 import plumberWorking from "@/assets/plumber-working.jpg";
 import toolsPipes from "@/assets/tools-pipes.jpg";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+const contactFormSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
+  phone: z.string().trim().min(1, "Phone is required").max(20, "Phone must be less than 20 characters"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters").optional().or(z.literal("")),
+  address: z.string().trim().max(200, "Address must be less than 200 characters").optional(),
+  serviceType: z.string().min(1, "Please select a service type"),
+  message: z.string().trim().max(1000, "Message must be less than 1000 characters").optional(),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+  });
+
+  const serviceType = watch("serviceType");
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: data,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Request Sent!",
+        description: "We've received your service request and will contact you shortly.",
+      });
+      reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send your request. Please call us directly at (555) 123-4567.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -424,43 +474,74 @@ const Index = () => {
 
             <Card>
               <CardContent className="pt-6">
-                <form className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   <div>
                     <Label htmlFor="name">Name *</Label>
-                    <Input id="name" required placeholder="Your name" />
+                    <Input 
+                      id="name" 
+                      {...register("name")}
+                      placeholder="Your name" 
+                    />
+                    {errors.name && <p className="text-sm text-destructive mt-1">{errors.name.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="phone">Phone *</Label>
-                    <Input id="phone" type="tel" required placeholder="(555) 123-4567" />
+                    <Input 
+                      id="phone" 
+                      type="tel" 
+                      {...register("phone")}
+                      placeholder="(555) 123-4567" 
+                    />
+                    {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="your.email@example.com" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      {...register("email")}
+                      placeholder="your.email@example.com" 
+                    />
+                    {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="address">Address</Label>
-                    <Input id="address" placeholder="Street, City, ZIP" />
+                    <Input 
+                      id="address" 
+                      {...register("address")}
+                      placeholder="Street, City, ZIP" 
+                    />
+                    {errors.address && <p className="text-sm text-destructive mt-1">{errors.address.message}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="service">Service Type</Label>
-                    <Select>
+                    <Label htmlFor="service">Service Type *</Label>
+                    <Select value={serviceType} onValueChange={(value) => setValue("serviceType", value)}>
                       <SelectTrigger id="service">
                         <SelectValue placeholder="Select a service" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="emergency">Emergency leak</SelectItem>
-                        <SelectItem value="drain">Clogged drain</SelectItem>
-                        <SelectItem value="heater">Water heater issue</SelectItem>
-                        <SelectItem value="fixture">Fixture installation</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="Emergency leak">Emergency leak</SelectItem>
+                        <SelectItem value="Clogged drain">Clogged drain</SelectItem>
+                        <SelectItem value="Water heater issue">Water heater issue</SelectItem>
+                        <SelectItem value="Fixture installation">Fixture installation</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.serviceType && <p className="text-sm text-destructive mt-1">{errors.serviceType.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="message">Message / Description</Label>
-                    <Textarea id="message" placeholder="Describe your plumbing issue..." rows={4} />
+                    <Textarea 
+                      id="message" 
+                      {...register("message")}
+                      placeholder="Describe your plumbing issue..." 
+                      rows={4} 
+                    />
+                    {errors.message && <p className="text-sm text-destructive mt-1">{errors.message.message}</p>}
                   </div>
-                  <Button type="submit" className="w-full">Submit Request</Button>
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : "Submit Request"}
+                  </Button>
                 </form>
               </CardContent>
             </Card>
