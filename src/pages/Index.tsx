@@ -14,6 +14,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import MagneticButton from "@/components/custom/MagneticButton";
+import FadeIn from "@/components/custom/FadeIn";
+import FloatingIcon from "@/components/custom/FloatingIcon";
+import AnimatedServiceCard from "@/components/custom/AnimatedServiceCard";
+import AnimatedCounter from "@/components/custom/AnimatedCounter";
+import AnimatedCheckmark from "@/components/custom/AnimatedCheckmark";
+import AnimatedTestimonial from "@/components/custom/AnimatedTestimonial";
+import { CardContainer, CardBody, CardItem } from "@/components/custom/ThreeDCardNew";
+import WaterDroplets from "@/components/custom/WaterDroplets";
+import FloatingBubbles from "@/components/custom/FloatingBubbles";
+import WaterWaves from "@/components/custom/WaterWaves";
+import Plasma from "@/components/reactbits/Plasma";
 
 const contactFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -30,7 +42,7 @@ const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  
+
   const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
   });
@@ -78,7 +90,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="text-xl font-bold text-primary">RapidFlow Plumbing</div>
-            
+
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               <button onClick={() => scrollToSection("home")} className="text-sm font-medium hover:text-primary transition-colors">Home</button>
@@ -87,12 +99,12 @@ const Index = () => {
               <button onClick={() => scrollToSection("reviews")} className="text-sm font-medium hover:text-primary transition-colors">Reviews</button>
               <button onClick={() => scrollToSection("service-area")} className="text-sm font-medium hover:text-primary transition-colors">Service Area</button>
               <button onClick={() => scrollToSection("contact")} className="text-sm font-medium hover:text-primary transition-colors">Contact</button>
-              <Button asChild size="sm" variant="default">
+              <MagneticButton size="sm" variant="default" strength={0.3} asChild>
                 <a href="tel:5551234567" className="flex items-center gap-2">
                   <Phone className="h-4 w-4" />
                   (555) 123-4567
                 </a>
-              </Button>
+              </MagneticButton>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -110,39 +122,57 @@ const Index = () => {
               <button onClick={() => scrollToSection("reviews")} className="text-left py-2 hover:text-primary transition-colors">Reviews</button>
               <button onClick={() => scrollToSection("service-area")} className="text-left py-2 hover:text-primary transition-colors">Service Area</button>
               <button onClick={() => scrollToSection("contact")} className="text-left py-2 hover:text-primary transition-colors">Contact</button>
-              <Button asChild className="w-full">
+              <MagneticButton className="w-full" strength={0.3} asChild>
                 <a href="tel:5551234567" className="flex items-center justify-center gap-2">
                   <Phone className="h-4 w-4" />
                   (555) 123-4567
                 </a>
-              </Button>
+              </MagneticButton>
             </nav>
           )}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section id="home" className="py-16 md:py-24 bg-secondary/20">
-        <div className="container mx-auto px-4">
+      <section id="home" className="py-16 md:py-24 bg-secondary/20 relative overflow-hidden">
+        {/* Water Effects Background */}
+        <WaterDroplets />
+        <FloatingBubbles />
+        <WaterWaves />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/5 to-background/30 pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-primary">Emergency Plumbing, 24/7.</h1>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8">Licensed, insured plumbers serving homes and small businesses.</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="text-lg">
-                  <a href="tel:5551234567" className="flex items-center justify-center gap-2">
-                    <Phone className="h-5 w-5" />
-                    Call Now
-                  </a>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="text-lg">
-                  <button onClick={() => scrollToSection("contact")}>Request Service</button>
-                </Button>
+              <FadeIn direction="up" delay={0}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                  <span className="gradient-text">Emergency Plumbing</span>, 24/7.
+                </h1>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.2}>
+                <p className="text-lg md:text-xl text-muted-foreground mb-8">Licensed, insured plumbers serving homes and small businesses.</p>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.4}>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <MagneticButton size="lg" strength={0.4} className="text-lg hover-glow" asChild>
+                    <a href="tel:5551234567" className="flex items-center justify-center gap-2">
+                      <Phone className="h-5 w-5" />
+                      Call Now
+                    </a>
+                  </MagneticButton>
+                  <MagneticButton size="lg" variant="outline" strength={0.3} className="text-lg" asChild>
+                    <button onClick={() => scrollToSection("contact")}>Request Service</button>
+                  </MagneticButton>
+                </div>
+              </FadeIn>
+            </div>
+            <FadeIn direction="left" delay={0.3}>
+              <div className="relative h-64 md:h-96 rounded-lg overflow-hidden shadow-xl hover-glow">
+                <img src={heroImage} alt="Professional plumber working under kitchen sink" className="w-full h-full object-cover" />
               </div>
-            </div>
-            <div className="relative h-64 md:h-96 rounded-lg overflow-hidden shadow-xl">
-              <img src={heroImage} alt="Professional plumber working under kitchen sink" className="w-full h-full object-cover" />
-            </div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -151,22 +181,46 @@ const Index = () => {
       <section className="py-8 border-y border-border bg-card">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            <div className="flex flex-col items-center text-center gap-2">
-              <Shield className="h-8 w-8 text-primary" />
-              <p className="text-sm font-medium">Licensed & Insured</p>
-            </div>
-            <div className="flex flex-col items-center text-center gap-2">
-              <Clock className="h-8 w-8 text-primary" />
-              <p className="text-sm font-medium">24/7 Emergency Service</p>
-            </div>
-            <div className="flex flex-col items-center text-center gap-2">
-              <DollarSign className="h-8 w-8 text-primary" />
-              <p className="text-sm font-medium">Upfront, Flat-Rate Pricing</p>
-            </div>
-            <div className="flex flex-col items-center text-center gap-2">
-              <Star className="h-8 w-8 text-primary" />
-              <p className="text-sm font-medium">100% Satisfaction Guarantee</p>
-            </div>
+            <FadeIn direction="up" delay={0}>
+              <div className="flex flex-col items-center text-center gap-2">
+                <FloatingIcon duration={3} delay={0}>
+                  <Shield className="h-8 w-8 text-primary" />
+                </FloatingIcon>
+                <p className="text-sm font-bold shiny-text">
+                  Licensed & Insured
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.1}>
+              <div className="flex flex-col items-center text-center gap-2">
+                <FloatingIcon duration={3.2} delay={0.5}>
+                  <Clock className="h-8 w-8 text-primary" />
+                </FloatingIcon>
+                <p className="text-sm font-bold shiny-text">
+                  24/7 Emergency Service
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.2}>
+              <div className="flex flex-col items-center text-center gap-2">
+                <FloatingIcon duration={2.8} delay={1}>
+                  <DollarSign className="h-8 w-8 text-primary" />
+                </FloatingIcon>
+                <p className="text-sm font-bold shiny-text">
+                  Upfront, Flat-Rate Pricing
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.3}>
+              <div className="flex flex-col items-center text-center gap-2">
+                <FloatingIcon duration={3.5} delay={1.5}>
+                  <Star className="h-8 w-8 text-primary" />
+                </FloatingIcon>
+                <p className="text-sm font-bold shiny-text">
+                  100% Satisfaction Guarantee
+                </p>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -182,53 +236,71 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <Card>
-              <CardContent className="pt-6">
-                <Droplet className="h-10 w-10 text-accent mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Emergency Leak Repair</h3>
-                <p className="text-muted-foreground">Fast response to stop leaks and prevent water damage to your property.</p>
-              </CardContent>
-            </Card>
+            <AnimatedServiceCard
+              icon={
+                <FloatingIcon delay={0}>
+                  <Droplet className="h-10 w-10 text-accent" />
+                </FloatingIcon>
+              }
+              title="Emergency Leak Repair"
+              description="Fast response to stop leaks and prevent water damage to your property."
+              delay={0}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <Search className="h-10 w-10 text-accent mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Drain Cleaning & Unclogging</h3>
-                <p className="text-muted-foreground">Professional drain clearing using the latest equipment and techniques.</p>
-              </CardContent>
-            </Card>
+            <AnimatedServiceCard
+              icon={
+                <FloatingIcon delay={0.2}>
+                  <Search className="h-10 w-10 text-accent" />
+                </FloatingIcon>
+              }
+              title="Drain Cleaning & Unclogging"
+              description="Professional drain clearing using the latest equipment and techniques."
+              delay={0.1}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <Flame className="h-10 w-10 text-accent mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Water Heater Repair & Installation</h3>
-                <p className="text-muted-foreground">Expert service for all types of water heaters, traditional and tankless.</p>
-              </CardContent>
-            </Card>
+            <AnimatedServiceCard
+              icon={
+                <FloatingIcon delay={0.4}>
+                  <Flame className="h-10 w-10 text-accent" />
+                </FloatingIcon>
+              }
+              title="Water Heater Repair & Installation"
+              description="Expert service for all types of water heaters, traditional and tankless."
+              delay={0.2}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <Search className="h-10 w-10 text-accent mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Sewer Line Inspection</h3>
-                <p className="text-muted-foreground">Camera inspections to diagnose and solve sewer line issues quickly.</p>
-              </CardContent>
-            </Card>
+            <AnimatedServiceCard
+              icon={
+                <FloatingIcon delay={0.6}>
+                  <Search className="h-10 w-10 text-accent" />
+                </FloatingIcon>
+              }
+              title="Sewer Line Inspection"
+              description="Camera inspections to diagnose and solve sewer line issues quickly."
+              delay={0.3}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <Home className="h-10 w-10 text-accent mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Bathroom & Kitchen Plumbing</h3>
-                <p className="text-muted-foreground">Complete plumbing solutions for your kitchen and bathroom spaces.</p>
-              </CardContent>
-            </Card>
+            <AnimatedServiceCard
+              icon={
+                <FloatingIcon delay={0.8}>
+                  <Home className="h-10 w-10 text-accent" />
+                </FloatingIcon>
+              }
+              title="Bathroom & Kitchen Plumbing"
+              description="Complete plumbing solutions for your kitchen and bathroom spaces."
+              delay={0.4}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <Wrench className="h-10 w-10 text-accent mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Fixture Installation</h3>
-                <p className="text-muted-foreground">Professional installation of faucets, toilets, and garbage disposals.</p>
-              </CardContent>
-            </Card>
+            <AnimatedServiceCard
+              icon={
+                <FloatingIcon delay={1.0}>
+                  <Wrench className="h-10 w-10 text-accent" />
+                </FloatingIcon>
+              }
+              title="Fixture Installation"
+              description="Professional installation of faucets, toilets, and garbage disposals."
+              delay={0.5}
+            />
           </div>
 
           <div className="relative h-64 rounded-lg overflow-hidden shadow-xl">
@@ -250,75 +322,75 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <div>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-accent mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold mb-1">Fast Response Times</p>
-                    <p className="text-sm text-muted-foreground">We arrive quickly when you need us most, especially for emergencies.</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-accent mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold mb-1">Clear, Upfront Pricing</p>
-                    <p className="text-sm text-muted-foreground">No hidden fees—you'll know the cost before we start work.</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-accent mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold mb-1">Respect for Your Home</p>
-                    <p className="text-sm text-muted-foreground">We treat your property with care, leaving it clean and tidy.</p>
-                  </div>
-                </li>
+                <AnimatedCheckmark
+                  title="Fast Response Times"
+                  description="We arrive quickly when you need us most, especially for emergencies."
+                  delay={0}
+                />
+                <AnimatedCheckmark
+                  title="Clear, Upfront Pricing"
+                  description="No hidden fees—you'll know the cost before we start work."
+                  delay={0.1}
+                />
+                <AnimatedCheckmark
+                  title="Respect for Your Home"
+                  description="We treat your property with care, leaving it clean and tidy."
+                  delay={0.2}
+                />
               </ul>
             </div>
             <div>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-accent mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold mb-1">Fully Licensed & Insured Techs</p>
-                    <p className="text-sm text-muted-foreground">All our plumbers are certified professionals with insurance coverage.</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-accent mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold mb-1">Locally Owned and Operated</p>
-                    <p className="text-sm text-muted-foreground">We're part of your community and committed to serving our neighbors.</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-accent mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold mb-1">Latest Tools & Techniques</p>
-                    <p className="text-sm text-muted-foreground">We use modern equipment to solve problems efficiently and effectively.</p>
-                  </div>
-                </li>
+                <AnimatedCheckmark
+                  title="Fully Licensed & Insured Techs"
+                  description="All our plumbers are certified professionals with insurance coverage."
+                  delay={0.3}
+                />
+                <AnimatedCheckmark
+                  title="Locally Owned and Operated"
+                  description="We're part of your community and committed to serving our neighbors."
+                  delay={0.4}
+                />
+                <AnimatedCheckmark
+                  title="Latest Tools & Techniques"
+                  description="We use modern equipment to solve problems efficiently and effectively."
+                  delay={0.5}
+                />
               </ul>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-primary mb-2">20+</p>
-                <p className="text-muted-foreground">Years Experience</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-primary mb-2">4.9★</p>
-                <p className="text-muted-foreground">Average Rating</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-primary mb-2">5,000+</p>
-                <p className="text-muted-foreground">Jobs Completed</p>
-              </CardContent>
-            </Card>
+            <FadeIn direction="up" delay={0.6}>
+              <Card className="hover-glow transition-all duration-300">
+                <CardContent className="pt-6">
+                  <p className="text-4xl font-bold text-primary mb-2">
+                    <AnimatedCounter value={20} suffix="+" />
+                  </p>
+                  <p className="text-muted-foreground">Years Experience</p>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.7}>
+              <Card className="hover-glow transition-all duration-300">
+                <CardContent className="pt-6">
+                  <p className="text-4xl font-bold text-primary mb-2">
+                    <AnimatedCounter value={4.9} suffix="★" />
+                  </p>
+                  <p className="text-muted-foreground">Average Rating</p>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.8}>
+              <Card className="hover-glow transition-all duration-300">
+                <CardContent className="pt-6">
+                  <p className="text-4xl font-bold text-primary mb-2">
+                    <AnimatedCounter value={5000} suffix="+" />
+                  </p>
+                  <p className="text-muted-foreground">Jobs Completed</p>
+                </CardContent>
+              </Card>
+            </FadeIn>
           </div>
 
           <div className="mt-12 relative h-64 rounded-lg overflow-hidden shadow-xl">
@@ -331,48 +403,33 @@ const Index = () => {
       <section id="reviews" className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Customer Reviews</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 shiny-text">Customer Reviews</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="mb-4 text-muted-foreground">"Quick response to our emergency leak. The plumber was professional and fixed the issue in under an hour. Highly recommend!"</p>
-                <p className="font-semibold">Sarah M.</p>
-                <p className="text-sm text-muted-foreground">Downtown</p>
-              </CardContent>
-            </Card>
+            <AnimatedTestimonial
+              quote="Quick response to our emergency leak. The plumber was professional and fixed the issue in under an hour. Highly recommend!"
+              author="Sarah M."
+              location="Downtown"
+              rating={5}
+              delay={0}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="mb-4 text-muted-foreground">"Fair pricing and excellent work on our water heater installation. The team was respectful and cleaned up after themselves."</p>
-                <p className="font-semibold">Michael R.</p>
-                <p className="text-sm text-muted-foreground">Westside</p>
-              </CardContent>
-            </Card>
+            <AnimatedTestimonial
+              quote="Fair pricing and excellent work on our water heater installation. The team was respectful and cleaned up after themselves."
+              author="Michael R."
+              location="Westside"
+              rating={5}
+              delay={0.2}
+            />
 
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="mb-4 text-muted-foreground">"Best plumber in town! Fixed our stubborn drain issue that other companies couldn't solve. Will definitely call again."</p>
-                <p className="font-semibold">Jennifer L.</p>
-                <p className="text-sm text-muted-foreground">Eastbrook</p>
-              </CardContent>
-            </Card>
+            <AnimatedTestimonial
+              quote="Best plumber in town! Fixed our stubborn drain issue that other companies couldn't solve. Will definitely call again."
+              author="Jennifer L."
+              location="Eastbrook"
+              rating={5}
+              delay={0.4}
+            />
           </div>
 
           <div className="text-center">
@@ -452,64 +509,76 @@ const Index = () => {
 
       {/* Contact Section */}
       <section id="contact" className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Request Service</h2>
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Request Service</h2>
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        <div className="relative grid md:grid-cols-2 gap-6 rounded-2xl overflow-hidden">
+          <div className="cards-plasma-mask">
+            <Plasma
+              color="#2563eb"
+              speed={0.8}
+              direction="forward"
+              scale={1.05}
+              opacity={1}
+              mouseInteractive={true}
+            />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="text-2xl font-bold mb-6">Call 24/7</h3>
-                <Button asChild size="lg" className="w-full mb-6 text-lg">
-                  <a href="tel:5551234567" className="flex items-center justify-center gap-2">
-                    <Phone className="h-5 w-5" />
-                    (555) 123-4567
-                  </a>
-                </Button>
-                <p className="text-center text-muted-foreground mb-6">or</p>
-                <p className="text-center text-muted-foreground">Prefer email? Fill out the form and we'll get back to you shortly.</p>
-              </CardContent>
-            </Card>
+          <Card className="relative z-10 bg-white/70 backdrop-blur-lg shadow-xl border border-border/40">
+            <CardContent className="pt-6">
+              <h3 className="text-2xl font-bold mb-6">Call 24/7</h3>
+              <MagneticButton size="lg" strength={0.5} className="w-full mb-6 text-lg pulse-glow" asChild>
+                <a href="tel:5551234567" className="flex items-center justify-center gap-2">
+                  <Phone className="h-5 w-5" />
+                  (555) 123-4567
+                </a>
+              </MagneticButton>
+              <p className="text-center text-muted-foreground mb-6">or</p>
+              <p className="text-center text-muted-foreground">Prefer email? Fill out the form and we'll get back to you shortly.</p>
+            </CardContent>
+          </Card>
 
-            <Card>
-              <CardContent className="pt-6">
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Card className="relative z-10 bg-white/70 backdrop-blur-lg shadow-xl border border-border/40">
+            <CardContent className="pt-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   <div>
                     <Label htmlFor="name">Name *</Label>
-                    <Input 
-                      id="name" 
+                    <Input
+                      id="name"
                       {...register("name")}
-                      placeholder="Your name" 
+                      placeholder="Your name"
                     />
                     {errors.name && <p className="text-sm text-destructive mt-1">{errors.name.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="phone">Phone *</Label>
-                    <Input 
-                      id="phone" 
-                      type="tel" 
+                    <Input
+                      id="phone"
+                      type="tel"
                       {...register("phone")}
-                      placeholder="(555) 123-4567" 
+                      placeholder="(555) 123-4567"
                     />
                     {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
+                    <Input
+                      id="email"
+                      type="email"
                       {...register("email")}
-                      placeholder="your.email@example.com" 
+                      placeholder="your.email@example.com"
                     />
                     {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="address">Address</Label>
-                    <Input 
-                      id="address" 
+                    <Input
+                      id="address"
                       {...register("address")}
-                      placeholder="Street, City, ZIP" 
+                      placeholder="Street, City, ZIP"
                     />
                     {errors.address && <p className="text-sm text-destructive mt-1">{errors.address.message}</p>}
                   </div>
@@ -531,11 +600,11 @@ const Index = () => {
                   </div>
                   <div>
                     <Label htmlFor="message">Message / Description</Label>
-                    <Textarea 
-                      id="message" 
+                    <Textarea
+                      id="message"
                       {...register("message")}
-                      placeholder="Describe your plumbing issue..." 
-                      rows={4} 
+                      placeholder="Describe your plumbing issue..."
+                      rows={4}
                     />
                     {errors.message && <p className="text-sm text-destructive mt-1">{errors.message.message}</p>}
                   </div>
@@ -543,11 +612,12 @@ const Index = () => {
                     {isSubmitting ? "Sending..." : "Submit Request"}
                   </Button>
                 </form>
-              </CardContent>
-            </Card>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-12">

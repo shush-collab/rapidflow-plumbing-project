@@ -102,4 +102,177 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  html {
+    /* scroll-behavior: smooth; - Removed to prevent conflict with Lenis */
+  }
+}
+
+@layer components {
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-background/70 backdrop-blur-lg border border-border/50;
+  }
+
+  /* Animated Gradient Background */
+  .animated-gradient {
+    background: linear-gradient(-45deg,
+        hsl(var(--primary)),
+        hsl(var(--accent)),
+        hsl(var(--secondary)),
+        hsl(var(--primary)));
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  /* Glow Effect */
+  .glow {
+    box-shadow:
+      0 0 20px hsla(var(--primary), 0.3),
+      0 0 40px hsla(var(--primary), 0.2),
+      0 0 60px hsla(var(--primary), 0.1);
+  }
+
+  /* Hover Glow */
+  .hover-glow {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow:
+      0 0 20px hsla(var(--accent), 0.4),
+      0 0 40px hsla(var(--accent), 0.3),
+      0 0 60px hsla(var(--accent), 0.2);
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  /* Floating Animation */
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Pulse Glow */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Shiny Gradient Text */
+  .shiny-text {
+    background: linear-gradient(90deg,
+        #1e293b 0%,
+        #334155 40%,
+        #94a3b8 50%,
+        #334155 60%,
+        #1e293b 100%);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine-text 4s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px hsla(var(--primary), 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px hsla(var(--primary), 0.6);
+  }
+}
+
+@keyframes shine-text {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
