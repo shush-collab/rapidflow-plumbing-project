@@ -516,7 +516,7 @@ const Index = () => {
 
       <div className="max-w-4xl mx-auto">
         <div className="relative grid md:grid-cols-2 gap-6 rounded-2xl overflow-hidden">
-          <div className="cards-plasma-mask">
+          <div className="cards-plasma-mask hidden md:block">
             <Plasma
               color="#2563eb"
               speed={0.8}

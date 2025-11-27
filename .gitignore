@@ -11,10 +11,24 @@ node_modules
 dist
 dist-ssr
 *.local
-
-# Editor directories and files
+.turbo
+.vercel
 .vscode/*
 !.vscode/extensions.json
+
+# Build output / caches
+.next
+.nuxt
+.cache
+.vite
+coverage
+*.tsbuildinfo
+
+# Env files
+.env
+.env.*
+
+# Editor directories and files
 .idea
 .DS_Store
 *.suo
